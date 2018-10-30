@@ -1,6 +1,6 @@
-FROM debian:jessie
+FROM debian:latest
 
-MAINTAINER Thomas Kerpe <toke@toke.de>
+MAINTAINER nw
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -21,10 +21,11 @@ RUN apt-get update && apt-get install -y wget && \
     apt-get update && apt-get install -y mosquitto mosquitto-clients && \
     adduser --system --disabled-password --disabled-login mosquitto
 
-RUN mkdir -p /mqtt/config /mqtt/data /mqtt/log
-COPY config /mqtt/config
+RUN mkdir -p /mqtt/config /mqtt/data /mqtt/log /example
+COPY config /example
+run cp /configfiles/config /mqtt/config
 RUN chown -R mosquitto:mosquitto /mqtt
-VOLUME ["/mqtt/config", "/mqtt/data", "/mqtt/log"]
+VOLUME ["/configfiles", "/example"]
 
 
 EXPOSE 1883 9001
